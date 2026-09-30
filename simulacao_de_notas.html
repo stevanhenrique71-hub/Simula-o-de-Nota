@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Simulação de Notas</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#eaf2ff,#f7f9fc);color:#172033;min-height:100vh}.container{width:min(100% - 30px,650px);margin:40px auto}.card{background:#fff;padding:30px;border-radius:22px;box-shadow:0 18px 50px rgba(31,55,90,.12)}.header{display:flex;align-items:center;gap:15px;margin-bottom:25px}.icon{width:55px;height:55px;display:grid;place-items:center;border-radius:15px;background:#e8f0ff;font-size:28px}h1{margin:0;font-size:28px}.header p{margin:5px 0 0;color:#718096}form{display:flex;flex-direction:column;gap:10px}label{font-weight:700;font-size:14px;margin-top:5px}input{width:100%;padding:13px 14px;border:1px solid #d9dfeb;border-radius:10px;font-size:15px;outline:none}input:focus{border-color:#3b82f6}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.grid>div{display:flex;flex-direction:column;gap:10px}button{margin-top:10px;padding:14px;border:0;border-radius:10px;background:#2563eb;color:white;font-weight:700;font-size:16px;cursor:pointer}button:hover{background:#1d4ed8}.resultado{margin-top:25px;padding:22px;border-radius:16px;background:#f8fafc;border:1px solid #e5eaf2}.notas{display:grid;grid-template-columns:1fr 1fr;gap:10px}.nota,.info{background:white;padding:12px;border-radius:10px;border:1px solid #e8edf5}.nota span,.info span{color:#68758a;font-size:13px;display:block}.nota strong,.info strong{font-size:18px}.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}.status{margin-top:15px;padding:14px;border-radius:10px;text-align:center;font-weight:800}.aprovado{background:#dcfce7;color:#166534}.recuperacao{background:#fef3c7;color:#92400e}.reprovado{background:#fee2e2;color:#991b1b}@media(max-width:520px){.grid,.notas,.info-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<main class="container"><section class="card">
+<div class="header"><div class="icon">📚</div><div><h1>Simulação de Notas</h1><p>1º ao 4º bimestre</p></div></div>
+<form id="form">
+<label>Nome do aluno</label><input id="nome" required>
+<div class="grid">
+<div><label>1º Bimestre</label><input id="b1" type="number" min="0" max="10" step="0.1" required></div>
+<div><label>2º Bimestre</label><input id="b2" type="number" min="0" max="10" step="0.1" required></div>
+<div><label>3º Bimestre</label><input id="b3" type="number" min="0" max="10" step="0.1" required></div>
+<div><label>4º Bimestre</label><input id="b4" type="number" min="0" max="10" step="0.1" required></div>
+</div>
+<label>Total de faltas no ano</label><input id="faltas" type="number" min="0" required>
+<button type="submit">Calcular boletim</button>
+</form>
+<div id="resultado"></div>
+</section></main>
+<script>
+document.getElementById("form").addEventListener("submit",function(e){
+e.preventDefault();
+const nome=document.getElementById("nome").value;
+const b1=Number(document.getElementById("b1").value),b2=Number(document.getElementById("b2").value),b3=Number(document.getElementById("b3").value),b4=Number(document.getElementById("b4").value),faltas=Number(document.getElementById("faltas").value);
+const media=(b1+b2+b3+b4)/4;
+let freq=100-faltas*.5;if(freq<0)freq=0;
+let status,classe;
+if(media>=7&&freq>=75){status="PASSOU DE ANO ✅";classe="aprovado"}
+else if(media>=5&&freq>=75){status="RECUPERAÇÃO ⚠️";classe="recuperacao"}
+else{status="NÃO PASSOU DE ANO ❌";classe="reprovado"}
+document.getElementById("resultado").innerHTML=`<section class="resultado"><h2>BOLETIM: ${nome.toUpperCase()}</h2><div class="notas"><div class="nota"><span>1º Bimestre</span><strong>${b1.toFixed(1)}</strong></div><div class="nota"><span>2º Bimestre</span><strong>${b2.toFixed(1)}</strong></div><div class="nota"><span>3º Bimestre</span><strong>${b3.toFixed(1)}</strong></div><div class="nota"><span>4º Bimestre</span><strong>${b4.toFixed(1)}</strong></div></div><div class="info-grid"><div class="info"><span>Média Final</span><strong>${media.toFixed(1)}</strong></div><div class="info"><span>Frequência</span><strong>${freq.toFixed(0)}%</strong></div></div><div class="status ${classe}">${status}</div></section>`;
+});
+</script>
+</body>
+</html>
